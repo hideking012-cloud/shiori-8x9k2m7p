@@ -1,0 +1,1599 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>11/22(日)〜23(月・祝) 松島温泉＆田代島 1泊2日旅のしおり</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Noto Serif JP & Noto Sans JP -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&family=Noto+Serif+JP:wght@600;700;900&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Noto Sans JP"', '"Yu Gothic"', 'sans-serif'],
+            serif: ['"Noto Serif JP"', '"Yu Mincho"', 'serif'],
+          },
+          colors: {
+            wa: {
+              washi: '#FAF8F5',
+              indigo: '#1B365D',
+              deepIndigo: '#10233F',
+              vermilion: '#C84B31',
+              gold: '#B8860B',
+              lightGold: '#E6C36A',
+              pine: '#235347',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #FAF8F5;
+      color: #1E293B;
+      font-family: 'Noto Sans JP', 'Yu Gothic', sans-serif;
+      background-image: radial-gradient(rgba(27, 54, 93, 0.04) 1px, transparent 0);
+      background-size: 20px 20px;
+    }
+
+    @keyframes slideFadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.99);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .slide-animate {
+      animation: slideFadeIn 0.36s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .hover-lift {
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .hover-lift:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px -8px rgba(27, 54, 93, 0.14);
+    }
+
+    @keyframes routeDash {
+      to {
+        stroke-dashoffset: -24;
+      }
+    }
+    .map-route-flow {
+      stroke-dasharray: 6 6;
+      animation: routeDash 1.15s linear infinite;
+    }
+
+    @keyframes pinRipple {
+      0% { transform: scale(0.95); opacity: 0.85; }
+      75% { transform: scale(1.75); opacity: 0; }
+      100% { transform: scale(1.75); opacity: 0; }
+    }
+    .pin-ripple {
+      transform-origin: center;
+      transform-box: fill-box;
+      animation: pinRipple 1.7s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+    }
+
+    .svg-pin-node {
+      cursor: pointer;
+      transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1);
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+    .svg-pin-node:hover {
+      transform: scale(1.14);
+    }
+    .svg-pin-node.active-node {
+      transform: scale(1.24);
+    }
+
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="antialiased selection:bg-[#C84B31] selection:text-white">
+
+  <!-- ==================== STICKY HEADER ==================== -->
+  <header class="sticky top-0 z-40 bg-[#1B365D]/95 backdrop-blur-md text-white shadow-lg border-b border-[#B8860B]/40">
+    <div class="max-w-6xl mx-auto px-3 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between gap-2">
+      <!-- 左：目次ドロワーボタン＆タイトル -->
+      <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
+        <button onclick="toggleTocDrawer(true)" aria-label="目次を開く" class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/10 hover:bg-white/20 active:bg-white/25 border border-white/20 text-xs font-extrabold transition cursor-pointer flex-shrink-0">
+          <i class="fa-solid fa-bars text-[#E6C36A]"></i>
+          <span>目次</span>
+        </button>
+        <div class="min-w-0">
+          <p class="text-[10px] sm:text-xs font-bold text-[#E6C36A] tracking-wider truncate">
+            2026.11.22(日) – 23(月・祝) ｜ 1泊2日 旅のしおり
+          </p>
+          <h1 class="font-serif text-sm sm:text-lg font-extrabold tracking-tight truncate">
+            松島温泉＆田代島 満喫プラン
+          </h1>
+        </div>
+      </div>
+
+      <!-- 右：表示モード切替＆チェックリスト進捗 -->
+      <div class="flex items-center gap-1.5 sm:gap-2 flex-shrink-0">
+        <div class="inline-flex rounded-xl bg-[#10233F] p-1 border border-white/15">
+          <button onclick="switchMode('slide')" id="btn-mode-slide" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-extrabold bg-[#B8860B] text-white shadow-sm transition cursor-pointer flex items-center gap-1">
+            <i class="fa-solid fa-display"></i>
+            <span>スライド</span>
+          </button>
+          <button onclick="switchMode('scroll')" id="btn-mode-scroll" class="px-2.5 sm:px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold text-slate-300 hover:text-white transition cursor-pointer flex items-center gap-1">
+            <i class="fa-solid fa-book-open"></i>
+            <span>全覧</span>
+          </button>
+        </div>
+
+        <button onclick="navigateToPage(10)" title="持ち物チェックリストへ" class="hidden md:inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#C84B31]/90 hover:bg-[#C84B31] text-white text-xs font-extrabold shadow-sm transition cursor-pointer">
+          <i class="fa-solid fa-list-check"></i>
+          <span id="header-check-badge">準備 0/7</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- クイックページピルバー（スライドモード時表示） -->
+    <div id="top-pill-bar" class="bg-[#10233F]/90 border-t border-white/10">
+      <div id="pill-container" class="max-w-6xl mx-auto px-3 sm:px-6 py-1.5 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+        <!-- JSでP1〜P11のピルを生成 -->
+      </div>
+    </div>
+  </header>
+
+  <!-- ==================== TABLE OF CONTENTS DRAWER ==================== -->
+  <div id="toc-drawer-backdrop" onclick="toggleTocDrawer(false)" class="hidden fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs transition-opacity"></div>
+  <aside id="toc-drawer" class="fixed top-0 left-0 bottom-0 z-50 w-80 max-w-[85vw] bg-[#FAF8F5] text-slate-900 shadow-2xl transform -translate-x-full transition-transform duration-300 ease-out flex flex-col border-r-2 border-[#B8860B]/40">
+    <div class="bg-[#1B365D] text-white px-5 py-4 flex items-center justify-between border-b border-[#B8860B]/40">
+      <div>
+        <span class="text-[11px] font-bold text-[#E6C36A] tracking-widest">CONTENTS</span>
+        <h2 class="font-serif text-lg font-extrabold">しおり目次（全11ページ）</h2>
+      </div>
+      <button onclick="toggleTocDrawer(false)" class="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 flex items-center justify-center cursor-pointer">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+    </div>
+    <div id="toc-list" class="flex-grow overflow-y-auto p-3 space-y-1.5">
+      <!-- JSで目次リストを生成 -->
+    </div>
+    <div class="p-4 bg-white border-t border-slate-200 text-xs text-slate-600 flex items-center justify-between">
+      <span><i class="fa-solid fa-mobile-screen-button text-[#1B365D] mr-1"></i>現地では「全覧」も便利</span>
+      <span id="drawer-check-badge" class="font-black text-[#C84B31]">0/7 完了</span>
+    </div>
+  </aside>
+
+  <!-- ==================== VIEW 1: SLIDE PRESENTATION MODE ==================== -->
+  <main id="slide-view" class="max-w-6xl mx-auto px-3 sm:px-6 pt-4 sm:pt-6 pb-8">
+    <!-- スライドステージ（タッチスワイプ対応） -->
+    <div id="slide-stage" class="bg-white rounded-3xl border-2 border-[#1B365D]/15 shadow-xl overflow-hidden min-h-[540px] sm:min-h-[600px] flex flex-col justify-between">
+      <!-- JSでアクティブなスライドを描画 -->
+    </div>
+
+    <!-- 下部ナビゲーションコントローラー -->
+    <div class="mt-4 bg-white/90 backdrop-blur-sm rounded-2xl border border-slate-200 px-4 py-3 shadow-sm flex items-center justify-between gap-3">
+      <button onclick="prevPage()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 active:bg-slate-300 text-[#1B365D] text-xs sm:text-sm font-extrabold transition cursor-pointer">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>前へ</span>
+      </button>
+
+      <div class="flex flex-col items-center text-center">
+        <span id="page-counter" class="text-xs sm:text-sm font-black text-[#1B365D]">P1 / 11</span>
+        <span class="text-[10px] text-slate-400 hidden sm:inline">← → キー または 画面スワイプでページ切替</span>
+      </div>
+
+      <button onclick="nextPage()" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#1B365D] hover:bg-[#10233F] text-white text-xs sm:text-sm font-extrabold shadow-sm transition cursor-pointer">
+        <span>次へ</span>
+        <i class="fa-solid fa-arrow-right text-[#E6C36A]"></i>
+      </button>
+    </div>
+  </main>
+
+  <!-- ==================== VIEW 2: FULL SCROLL BOOKLET MODE ==================== -->
+  <main id="scroll-view" class="hidden max-w-5xl mx-auto px-3 sm:px-6 py-6 sm:py-10 space-y-8">
+    <!-- JSで全11セクションを縦スクロール展開 -->
+  </main>
+
+  <!-- ==================== JAVASCRIPT ==================== -->
+  <script>
+    // ---------- 1. データ定義 ----------
+    const matsushimaSpots = [
+      {
+        id: 1,
+        name: "松島海岸駅",
+        time: "11:58頃着・起点 / 15:45頃再集合",
+        move: "仙台駅 11:20発（JR仙石線・石巻行き）で到着",
+        hours: "始発〜終電（改札外コインロッカーあり）",
+        fee: "ロッカー 400円〜700円程度",
+        badgeBg: "bg-[#1B365D]",
+        svgX: 145, svgY: 265,
+        desc: "日本三景・松島の玄関口。改札外のコインロッカーに宿泊バッグを預けて身軽に観光スタート！15:45頃にここへ戻り、事前予約した送迎バス（またはタクシー）でホテル壮観へ向かいます。",
+        tip: "連休のお昼時はコインロッカーが埋まりやすいため、下車後すぐに確保するのがベストです。",
+        mapQuery: "松島海岸駅"
+      },
+      {
+        id: 2,
+        name: "松島さかな市場",
+        time: "12:15頃〜（滞在目安 55分）",
+        move: "①松島海岸駅から 海沿いを徒歩約10分",
+        hours: "8:00〜16:00（焼き牡蠣ハウスは〜15:00頃）",
+        fee: "入場無料（海鮮丼 1,500円〜 / 焼き牡蠣 2個500円〜）",
+        badgeBg: "bg-[#C84B31]",
+        svgX: 442, svgY: 195,
+        desc: "気仙沼のマグロ丼や三陸の旬魚を使った海鮮丼・寿司が楽しめる人気市場。隣接の「焼き牡蠣ハウス」では11月に身が太り始めた三陸産牡蠣の浜焼きや名物「牡蠣バーガー」を味わえます。",
+        tip: "12時台は最も混み合う時間帯のため、駅に荷物を預けたらまっすぐランチへ向かうのが正解です。",
+        mapQuery: "松島さかな市場"
+      },
+      {
+        id: 3,
+        name: "国宝 瑞巌寺（ずいがんじ）",
+        time: "13:20頃〜（滞在目安 50分）",
+        move: "②松島さかな市場から 徒歩約8分",
+        hours: "8:30〜16:00（11月冬季拝観・最終受付15:30頃）",
+        fee: "大人 1,000円（宝物館共通）",
+        badgeBg: "bg-[#235347]",
+        svgX: 310, svgY: 115,
+        desc: "伊達政宗公が桃山文化の粋を集めて再建した東北随一の禅寺。杉並木の参道や僧侶が修行した洞窟群、金箔や極彩色の障壁画が輝く国宝の本堂・庫裡は圧倒的な美しさです。",
+        tip: "11月は16:00閉門と早めなので、午後一番に参拝しておくと余裕を持って見学できます（※本堂内は撮影禁止）。",
+        mapQuery: "瑞巌寺 宮城県松島町"
+      },
+      {
+        id: 4,
+        name: "瑞巌寺 五大堂（ごだいどう）",
+        time: "14:15頃〜（滞在目安 20分）",
+        move: "③瑞巌寺から 海側へ徒歩約5分",
+        hours: "8:30〜16:30（日没頃閉門）",
+        fee: "拝観無料",
+        badgeBg: "bg-[#235347]",
+        svgX: 378, svgY: 225,
+        desc: "松島湾に浮かぶ小島に建つ東北最古の桃山建築。島へ渡る赤い「すかし橋」は足元の隙間から海面が見え、身を引き締めて渡る名物スポットです。",
+        tip: "お堂の軒下に彫られた十二支の彫刻を探してみてください。福浦島や遊覧船を背景にした写真撮影にも最適です。",
+        mapQuery: "五大堂 宮城県松島町"
+      },
+      {
+        id: 5,
+        name: "福浦橋（ふくうらばし・出会い橋）",
+        time: "14:40頃〜（滞在目安 25分）",
+        move: "④五大堂から 海沿いを徒歩約5分",
+        hours: "8:30〜17:00（11月〜2月・通行受付16:30まで）",
+        fee: "大人 200円",
+        badgeBg: "bg-[#235347]",
+        svgX: 472, svgY: 210,
+        desc: "松島海岸と県立自然植物園「福浦島」を結ぶ全長252mの朱塗りの橋。「出会い橋」とも呼ばれ、海上散歩気分で松島湾の多島美をパノラマで堪能できます。",
+        tip: "橋の上は海風が吹き抜けるため、上着のファスナーをしっかり閉めて渡りましょう。",
+        mapQuery: "福浦橋 宮城県松島町"
+      },
+      {
+        id: 6,
+        name: "観瀾亭（かんらんてい）",
+        time: "15:10頃〜（滞在目安 30分）",
+        move: "⑤福浦橋から 駅方面へ徒歩約8分",
+        hours: "8:30〜16:30（11月〜3月・お茶受付16:00頃）",
+        fee: "観覧料 300円 ＋ お抹茶・和菓子セット 600円〜",
+        badgeBg: "bg-[#C84B31]",
+        svgX: 235, svgY: 248,
+        desc: "豊臣秀吉から拝領し伊達政宗公が移築したと伝わる由緒ある茶室。波静かな松島湾を眼下に眺めながら、温かいお抹茶と和菓子で優雅なひとときを過ごせます。",
+        tip: "松島海岸駅まで徒歩約5分の位置にあるため、観光の締めくくりにぴったりの休憩スポットです。",
+        mapQuery: "観瀾亭 宮城県松島町"
+      },
+      {
+        id: 7,
+        name: "大江戸温泉物語Premium ホテル壮観",
+        time: "15:45〜16:00頃 チェックイン",
+        move: "①松島海岸駅から 送迎バス（またはタクシー）で約5〜7分",
+        hours: "チェックイン 15:00〜 ／ 朝食 07:00〜",
+        fee: "宿泊プラン内（ラウンジ無料ドリンク・朝夕バイキング付）",
+        badgeBg: "bg-[#B8860B]",
+        svgX: 750, svgY: 110,
+        desc: "松島湾を望む開放的な温泉露天風呂と、アルコールやソフトドリンク・アイスが無料で楽しめるプレミアムラウンジ、三陸の海の幸バイキングが自慢の温泉リゾート。",
+        tip: "【重要】チェックイン直後にフロントで①翌朝(23日) 07:00ちょうど出発の「松島海岸駅」行きタクシー予約 ②事前精算を済ませておきましょう！",
+        mapQuery: "大江戸温泉物語Premium ホテル壮観"
+      }
+    ];
+
+    const tashiroSpots = [
+      {
+        id: 1,
+        name: "大泊港（おおどまりこう）",
+        time: "09:36着・スタート地点（滞在目安 10分）",
+        move: "石巻中央発着所 09:00発フェリーで約36分",
+        facilities: "公衆トイレ・自販機あり",
+        badgeBg: "bg-[#1B365D]",
+        svgX: 282, svgY: 75,
+        desc: "田代島の北側に位置する静かな漁港。下船するとさっそく港の防波堤や日向でくつろぐ猫たちが出迎えてくれます。ここから島の南端・仁斗田港へ向けて約3.5〜4kmの縦断ウォーキングがスタート！",
+        tip: "これから猫神社方面へ向けて上り坂が続くため、出発前に港の公衆トイレを済ませておきましょう。",
+        mapQuery: "大泊港 宮城県石巻市田代浜"
+      },
+      {
+        id: 2,
+        name: "猫神社（美與利大明神）",
+        time: "10:10頃着（滞在目安 20分）",
+        move: "①大泊港から 坂道を徒歩約20分（島中央部）",
+        facilities: "トイレ・自販機なし（森の中の祠）",
+        badgeBg: "bg-[#C84B31]",
+        svgX: 375, svgY: 140,
+        desc: "かつて島で盛んだった養蚕の天敵・ネズミを退治し、大漁をもたらす守り神として猫神様を祀る祠。木の鳥居や猫の置物、参拝者が奉納したイラスト絵馬が並び、木漏れ日の中で昼寝する猫たちに出会えます。",
+        tip: "お供え物の放置は野生動物の原因になるため、お賽銭と参拝で猫たちの健康長寿を祈りましょう。",
+        mapQuery: "猫神社 美與利大明神 田代島"
+      },
+      {
+        id: 3,
+        name: "田代島 島のえき",
+        time: "10:40頃着（滞在目安 40分）",
+        move: "②猫神社から 徒歩約5分",
+        facilities: "トイレ・自販機・売店・カフェスペースあり",
+        badgeBg: "bg-[#B8860B]",
+        svgX: 380, svgY: 190,
+        desc: "廃校となった旧田代小中学校の校舎を活用した島内最大の休憩・交流拠点。10時半〜昼前後の時間帯は校庭やベンチ周辺に多数の猫が集まり、田代島で最も猫密度が高いエリアの一つです。",
+        tip: "島限定オリジナル猫雑貨（手ぬぐい・トートバッグ等）や軽食・カフェメニューも販売しています（現金のみ）。",
+        mapQuery: "田代島 島のえき"
+      },
+      {
+        id: 4,
+        name: "仁斗田集落（にとだしゅうらく）",
+        time: "11:30頃〜（散策目安 25分）",
+        move: "③島のえきから 南へ下り坂を徒歩約15分",
+        facilities: "集落内生活道路（トイレなし）",
+        badgeBg: "bg-[#C84B31]",
+        svgX: 355, svgY: 250,
+        desc: "島民の多くが暮らす南側の漁師町。石垣の上や古民家の軒先、路地の日向で思い思いに日向ぼっこする猫の密度が島内で最も高いエリアです。",
+        tip: "民家の敷地内へ無断で立ち入らないようマナーを守りながら散策を楽しんでください。",
+        mapQuery: "仁斗田 宮城県石巻市田代浜"
+      },
+      {
+        id: 5,
+        name: "クロネコ堂・田代食堂周辺",
+        time: "12:00頃〜（休憩目安 30分）",
+        move: "④仁斗田集落中心部から 徒歩約5分",
+        facilities: "商店・食堂エリア（現金のみ）",
+        badgeBg: "bg-[#B8860B]",
+        svgX: 338, svgY: 295,
+        desc: "仁斗田エリアにある商店「クロネコ堂」や「田代食堂」周辺。ドリンクやお菓子、手作り猫モチーフ雑貨、タイミングが合えば軽食などでひと休みできます。",
+        tip: "島内の商店・食堂は不定休や売り切れの場合があるため、朝石巻駅等で軽食・お茶を持参しておくと安心です。",
+        mapQuery: "クロネコ堂 田代島"
+      },
+      {
+        id: 6,
+        name: "マンガアイランド（寄り道絶景）",
+        time: "12:35頃〜（時間・体力に余裕があれば）",
+        move: "⑤クロネコ堂周辺から 高台へ徒歩約12分",
+        facilities: "展望デッキ・猫型ロッジ外観見学",
+        badgeBg: "bg-[#235347]",
+        svgX: 462, svgY: 338,
+        desc: "ちばてつや先生や里中満智子先生ら著名漫画家がデザインした「猫型ロッジ」が並ぶ高台の施設。展望デッキからは太平洋と牡鹿半島・網地島の絶景が一望できます。",
+        tip: "仁斗田港への戻り道も考慮し、13:05頃には港へ向けて下り始めると13:40発のフェリーに余裕を持って間に合います。",
+        mapQuery: "マンガアイランド 田代島"
+      },
+      {
+        id: 7,
+        name: "仁斗田港（にとだこう）",
+        time: "13:15頃着 〜 13:40出航（ゴール）",
+        move: "⑤クロネコ堂周辺から徒歩約5分（⑥からは徒歩約12分）",
+        facilities: "待合所・公衆トイレ・自販機あり",
+        badgeBg: "bg-[#1B365D]",
+        svgX: 312, svgY: 340,
+        desc: "縦断ルートのゴール地点！網地島ラインのフェリー発着港で、港の広場や待合所周辺にも人懐っこい猫たちがたくさん集まっています。出航時間まで最後の猫タイムと記念撮影を満喫できます。",
+        tip: "【重要】13:40発の昼便に乗船するため、遅くとも13:25頃（出航15分前）までには待合所前に集合し、行きに購入した往復乗船券を手元に準備しましょう。",
+        mapQuery: "仁斗田港 宮城県石巻市田代浜"
+      }
+    ];
+
+    const checklistItems = [
+      { id: "chk-bus", tag: "事前予約", title: "ホテル壮観 11/22お迎え送迎バス予約", note: "松島海岸駅16:00前後着に合わせて公式HP等から事前予約（協力金片道40円）。" },
+      { id: "chk-ic", tag: "新幹線・改札", title: "新幹線eチケット紐づけ済みICカード2枚（プライベート／ミサ）", note: "行き(やまびこ131号 9号車4A/B)・帰り(やまびこ64号 10号車2B/C)のチケットレス乗車＆在来線運賃チャージ。" },
+      { id: "chk-cash", tag: "現金・旧千円札", title: "現金（旧千円札・小銭）の用意", note: "網地島ライン券売機は現金のみ・新札非対応の場合あり（往復大人2,500円）。島内のお守り・売店もすべて現金のみ。" },
+      { id: "chk-taxi", tag: "22日宿で手配", title: "チェックイン時に翌朝(23日) 07:00発松島海岸駅行きタクシー予約", note: "07:11発の仙石線に乗るため必須。あわせて事前精算と翌朝用の軽食・お茶の調達も完了。" },
+      { id: "chk-ferry", tag: "23日朝7時確認", title: "網地島ライン公式サイトで当日の運航状況を確認", note: "11月下旬は季節風による強風で欠航・抜港（大泊港通過など）になる場合があるため朝7時頃に必ず確認。" },
+      { id: "chk-wear", tag: "服装・防寒", title: "防寒アウター・歩きやすいスニーカー・手袋/マフラー", note: "松島の海沿いや田代島は海風が冷たく、島内は坂道が多いため履き慣れたスニーカーが必須。" },
+      { id: "chk-bag", tag: "島内対策", title: "モバイルバッテリー・ゴミ持ち帰り用ビニール袋・酔い止め", note: "島内にゴミ箱はありません。写真撮影が多いためバッテリーも必携です。" }
+    ];
+
+    // ---------- 2. 状態管理 ----------
+    let currentPage = 0;
+    let viewMode = 'slide';
+    let activeMatsushimaId = 1;
+    let matsushimaZoomed = false;
+    let activeTashiroId = 1;
+    let tashiroZoomed = false;
+
+    let matsushimaVisited = JSON.parse(localStorage.getItem('shiori_matsu_visit_v5') || '{}');
+    let tashiroVisited = JSON.parse(localStorage.getItem('shiori_tashiro_visit_v5') || '{}');
+    let checklistState = JSON.parse(localStorage.getItem('shiori_checklist_v5') || '{}');
+
+    // ---------- 3. 全11ページ定義 ----------
+    const pages = [
+      // P1: 表紙
+      {
+        shortTitle: "P1 表紙",
+        fullTitle: "P1. 表紙（旅のしおり）",
+        icon: "fa-book-bookmark",
+        render: () => `
+          <div class="h-full flex flex-col justify-between bg-gradient-to-br from-[#10233F] via-[#1B365D] to-[#235347] text-white p-6 sm:p-12 relative overflow-hidden">
+            <div class="absolute -right-20 -top-20 w-80 h-80 rounded-full border border-[#E6C36A]/20 pointer-events-none"></div>
+            <div class="absolute -right-8 -top-8 w-56 h-56 rounded-full border border-[#E6C36A]/15 pointer-events-none"></div>
+            <div class="absolute -left-16 -bottom-16 w-64 h-64 rounded-full bg-[#C84B31]/10 blur-2xl pointer-events-none"></div>
+
+            <div class="flex flex-wrap items-center justify-between gap-2 relative z-10">
+              <span class="inline-flex items-center gap-2 bg-[#C84B31] text-white text-xs sm:text-sm font-black px-3.5 py-1.5 rounded-full shadow-md">
+                <i class="fa-regular fa-calendar-check"></i>
+                <span>2026年11月22日（日）〜 23日（月・祝）</span>
+              </span>
+              <span class="text-xs font-bold text-[#E6C36A] tracking-widest uppercase">
+                TRAVEL BOOKLET ｜ 1 NIGHT 2 DAYS
+              </span>
+            </div>
+
+            <div class="my-auto py-8 relative z-10">
+              <p class="text-sm sm:text-base font-bold text-[#E6C36A] tracking-widest mb-2">
+                日本三景の絶景温泉と、猫と歩く三陸の離島へ
+              </p>
+              <h2 class="font-serif text-3xl sm:text-5xl md:text-6xl font-black leading-tight tracking-tight mb-4">
+                松島温泉＆田代島<br>
+                <span class="text-[#E6C36A]">1泊2日 旅のしおり</span>
+              </h2>
+              <div class="w-20 h-1.5 bg-[#C84B31] rounded-full mb-5"></div>
+              <p class="text-sm sm:text-lg text-slate-200 max-w-2xl leading-relaxed">
+                宿泊：<strong>大江戸温泉物語Premium ホテル壮観</strong>（松島）<br>
+                北朝霞・大宮発着 ｜ 新幹線・在来線・フェリー確定時刻＆詳細観光マップ完備
+              </p>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 relative z-10 pt-4 border-t border-white/15">
+              <div class="bg-white/10 backdrop-blur-xs rounded-2xl p-3.5 border border-white/15 flex items-center gap-3">
+                <span class="w-10 h-10 rounded-xl bg-[#235347] text-amber-300 flex items-center justify-center font-black text-sm flex-shrink-0">往路</span>
+                <div class="text-xs sm:text-sm">
+                  <p class="font-extrabold text-amber-200">11/22(日) やまびこ131号（グリーン車）</p>
+                  <p class="text-slate-200">大宮 09:47発 → 仙台 11:10着（9号車4番A・B席）</p>
+                </div>
+              </div>
+              <div class="bg-white/10 backdrop-blur-xs rounded-2xl p-3.5 border border-white/15 flex items-center gap-3">
+                <span class="w-10 h-10 rounded-xl bg-[#C84B31] text-white flex items-center justify-center font-black text-sm flex-shrink-0">復路</span>
+                <div class="text-xs sm:text-sm">
+                  <p class="font-extrabold text-amber-200">11/23(月・祝) やまびこ64号（グランクラス）</p>
+                  <p class="text-slate-200">仙台 17:24発 → 大宮 19:03着（10号車2番B・C席）</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      // P2: 1日目（11/22 日）確定タイムスケジュール
+      {
+        shortTitle: "P2 1日目行程",
+        fullTitle: "P2. 1日目（11/22 日）確定タイムスケジュール",
+        icon: "fa-clock",
+        render: () => `
+          <div class="h-full flex flex-col justify-between bg-[#FAF8F5] p-5 sm:p-8">
+            <div class="border-b-2 border-[#1B365D]/15 pb-3 mb-4 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <span class="inline-block bg-[#1B365D] text-[#E6C36A] text-xs font-black px-3 py-0.5 rounded-md mb-1">DAY 1 ｜ 11月22日（日）休日ダイヤ</span>
+                <h2 class="font-serif text-xl sm:text-3xl font-black text-[#1B365D]">1日目：北朝霞から松島王道観光＆ホテル壮観へ</h2>
+              </div>
+              <button onclick="navigateToPage(2)" class="text-xs font-extrabold px-3 py-2 rounded-xl bg-[#235347] text-white hover:opacity-90 transition cursor-pointer">
+                <i class="fa-solid fa-map mr-1 text-amber-300"></i>松島マップを見る
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 my-auto">
+              <!-- 左：午前〜昼の鉄道移動 -->
+              <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-3">
+                <h3 class="font-serif text-base sm:text-lg font-black text-[#1B365D] flex items-center gap-2 border-b border-slate-100 pb-2">
+                  <i class="fa-solid fa-train text-[#C84B31]"></i>
+                  <span>午前：電車・新幹線（ICタッチ乗車）</span>
+                </h3>
+                <ul class="space-y-2.5 text-xs sm:text-sm">
+                  <li class="flex gap-3">
+                    <span class="font-black text-[#1B365D] w-14 flex-shrink-0">08:56</span>
+                    <div><strong>北朝霞駅 出発</strong>（JR武蔵野線・西船橋方面）<br><span class="text-slate-500 text-xs">※1本前の08:45発ならさらに余裕です</span></div>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="font-black text-[#1B365D] w-14 flex-shrink-0">09:07</span>
+                    <div><strong>武蔵浦和駅 出発</strong>（09:03着／JR埼京線・大宮行き → <strong>09:18 大宮駅着</strong>）</div>
+                  </li>
+                  <li class="flex gap-3 bg-emerald-50/80 p-2.5 rounded-xl border border-emerald-200">
+                    <span class="font-black text-[#235347] w-14 flex-shrink-0">09:47</span>
+                    <div>
+                      <strong class="text-[#235347]">大宮駅 出発（東北新幹線「やまびこ131号」仙台行き）</strong><br>
+                      <span class="text-xs font-bold text-slate-700">グリーン車 9号車4番A・B席（紐づけ済みICカードで改札通過）</span>
+                    </div>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="font-black text-[#1B365D] w-14 flex-shrink-0">11:10</span>
+                    <div><strong>仙台駅 到着</strong> → 地下のJR仙石線ホーム（9・10番線）へ移動（乗換10分）</div>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="font-black text-[#1B365D] w-14 flex-shrink-0">11:20</span>
+                    <div><strong>仙台駅 出発</strong>（JR仙石線・石巻行き）→ <strong>11:58頃 松島海岸駅 到着</strong><br><span class="text-slate-500 text-xs">※乗り遅れた場合は11:40発（高城町行き）→高城町乗換で向かえます</span></div>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- 右：午後の松島観光＆宿チェックイン -->
+              <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-3">
+                <h3 class="font-serif text-base sm:text-lg font-black text-[#235347] flex items-center gap-2 border-b border-slate-100 pb-2">
+                  <i class="fa-solid fa-torii-gate text-[#B8860B]"></i>
+                  <span>午後：松島観光＆ホテルチェックイン</span>
+                </h3>
+                <ul class="space-y-2.5 text-xs sm:text-sm">
+                  <li class="flex gap-3">
+                    <span class="font-black text-[#C84B31] w-14 flex-shrink-0">12:00</span>
+                    <div><strong>松島海岸駅 コインロッカー</strong>に宿泊荷物を預けて身軽にスタート</div>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="font-black text-[#C84B31] w-14 flex-shrink-0">12:15</span>
+                    <div><strong>松島さかな市場</strong>で海鮮丼＆焼き牡蠣ランチ（駅から徒歩約10分）</div>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="font-black text-[#235347] w-14 flex-shrink-0">13:20</span>
+                    <div><strong>国宝 瑞巌寺</strong> 参拝（16:00閉門前に見学）</div>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="font-black text-[#235347] w-14 flex-shrink-0">14:15</span>
+                    <div><strong>五大堂</strong>（14:15頃）→ <strong>福浦橋</strong>（14:40頃）朱塗りの橋で絶景散策</div>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="font-black text-[#C84B31] w-14 flex-shrink-0">15:10</span>
+                    <div><strong>観瀾亭</strong>でお抹茶と和菓子休憩（駅まで徒歩約5分）</div>
+                  </li>
+                  <li class="flex gap-3 bg-amber-50 p-2.5 rounded-xl border border-amber-300">
+                    <span class="font-black text-[#B8860B] w-14 flex-shrink-0">16:00</span>
+                    <div>
+                      <strong class="text-amber-950">ホテル壮観 チェックイン（事前予約の送迎バス約5〜7分）</strong><br>
+                      <span class="text-xs font-extrabold text-[#C84B31]">★到着後すぐフロントで「翌朝7:00ちょうど発の松島海岸駅行きタクシー予約」＆「事前精算」を依頼！</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      // P3: 松島インタラクティブ観光マップ
+      {
+        shortTitle: "P3 松島マップ",
+        fullTitle: "P3. 松島インタラクティブ観光マップ",
+        icon: "fa-map-location-dot",
+        render: () => {
+          const spot = matsushimaSpots.find(s => s.id === activeMatsushimaId) || matsushimaSpots[0];
+          const isVisited = !!matsushimaVisited[spot.id];
+          const gmapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.mapQuery)}`;
+          const mVb = matsushimaZoomed
+            ? `${Math.max(0, Math.min(420, spot.svgX - 200))} ${Math.max(0, Math.min(190, spot.svgY - 115))} 400 230`
+            : "0 0 820 420";
+          return `
+            <div class="h-full flex flex-col justify-between bg-[#FAF8F5] p-4 sm:p-7">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div>
+                  <span class="inline-block bg-[#235347] text-white text-[11px] font-black px-2.5 py-0.5 rounded mb-1">DAY 1 INTERACTIVE MAP</span>
+                  <h2 class="font-serif text-xl sm:text-2xl font-black text-[#1B365D]">松島王道ウォーキング・詳細観光マップ（①〜⑦）</h2>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <button onclick="setMatsushimaZoom(false)" class="px-3 py-1.5 rounded-xl text-xs font-extrabold transition cursor-pointer ${!matsushimaZoomed ? 'bg-[#1B365D] text-white shadow-sm' : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'}">
+                    <i class="fa-solid fa-map mr-1"></i>全体表示
+                  </button>
+                  <button onclick="setMatsushimaZoom(true)" class="px-3 py-1.5 rounded-xl text-xs font-extrabold transition cursor-pointer ${matsushimaZoomed ? 'bg-[#1B365D] text-white shadow-sm' : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'}">
+                    <i class="fa-solid fa-magnifying-glass-plus text-[#E6C36A] mr-1"></i>選択スポット拡大
+                  </button>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 my-auto items-stretch">
+                <!-- 左7列：詳細SVGイラストマップ -->
+                <div class="lg:col-span-7 bg-[#d7edf2] rounded-2xl border-2 border-[#1B365D]/20 overflow-hidden shadow-sm flex flex-col justify-between">
+                  <div class="bg-white/90 px-3 py-1.5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 text-[11px] font-bold">
+                    <div class="flex items-center gap-3 flex-wrap">
+                      <span class="inline-flex items-center gap-1 text-[#C84B31]">
+                        <span class="w-4 h-0.5 border-t-2 border-dashed border-[#C84B31] inline-block"></span>徒歩ルート(1→2→3→4→5→6→1)
+                      </span>
+                      <span class="inline-flex items-center gap-1 text-[#92400e]">
+                        <span class="w-4 h-0.5 bg-[#B8860B] inline-block"></span>送迎バス/車(1→7 約5〜7分)
+                      </span>
+                    </div>
+                    <span class="text-slate-500 hidden sm:inline">ピンをタップで詳細切替</span>
+                  </div>
+
+                  <svg viewBox="${mVb}" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <linearGradient id="mSeaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#cbe7ef" />
+                        <stop offset="60%" stop-color="#9ad0e2" />
+                        <stop offset="100%" stop-color="#76b8cf" />
+                      </linearGradient>
+                      <marker id="mBusArrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#B8860B" />
+                      </marker>
+                    </defs>
+
+                    <rect x="0" y="0" width="820" height="420" fill="url(#mSeaGrad)" />
+                    <g stroke="#ffffff" stroke-width="1.4" stroke-opacity="0.5" fill="none">
+                      <path d="M 430 345 Q 450 335 470 345 T 510 345" />
+                      <path d="M 620 290 Q 640 280 660 290 T 700 290" />
+                      <path d="M 270 365 Q 290 355 310 365 T 350 365" />
+                    </g>
+                    <text x="530" y="388" font-size="22" font-weight="800" fill="#1B365D" opacity="0.25" letter-spacing="8" font-family="Noto Serif JP, serif">松 島 湾</text>
+
+                    <!-- 陸地（海岸線） -->
+                    <path d="M 0,0 L 820,0 L 820,135 C 760,148 690,165 620,178 C 550,192 490,222 425,230 C 365,236 315,252 250,272 C 185,292 125,338 65,392 L 0,410 Z" fill="#f6f1e7" stroke="#cbd5e1" stroke-width="2" />
+
+                    <!-- 瑞巌寺・円通院の杜（緑地・松林） -->
+                    <path d="M 215,35 C 285,22 365,28 405,68 C 430,92 415,135 370,145 C 320,155 255,135 225,105 Z" fill="#d4e6d8" />
+                    <g fill="#235347" opacity="0.7">
+                      <polygon points="265,55 258,70 272,70" /><polygon points="265,64 256,80 274,80" />
+                      <polygon points="365,48 358,63 372,63" /><polygon points="365,57 356,73 374,73" />
+                      <polygon points="680,45 673,60 687,60" /><polygon points="680,54 671,70 689,70" />
+                    </g>
+
+                    <!-- 周辺ランドマーク -->
+                    <g transform="translate(245, 92)">
+                      <rect x="0" y="0" width="54" height="17" rx="4" fill="#ffffff" opacity="0.85" stroke="#94a3b8" stroke-width="1" />
+                      <text x="27" y="12" font-size="9" font-weight="700" fill="#475569" text-anchor="middle">円通院</text>
+                    </g>
+                    <g transform="translate(295, 265)">
+                      <rect x="0" y="0" width="84" height="18" rx="5" fill="#e0f2fe" stroke="#0284c7" stroke-width="1" />
+                      <text x="42" y="12.5" font-size="9" font-weight="800" fill="#0369a1" text-anchor="middle">🚢 観光船桟橋</text>
+                    </g>
+
+                    <!-- JR仙石線 -->
+                    <path d="M 20,380 Q 95,305 145,265 T 280,165 T 450,95 T 660,55 L 820,38" fill="none" stroke="#475569" stroke-width="3.5" />
+                    <path d="M 20,380 Q 95,305 145,265 T 280,165 T 450,95 T 660,55 L 820,38" fill="none" stroke="#ffffff" stroke-width="1.8" stroke-dasharray="7 7" />
+                    <rect x="42" y="330" width="72" height="17" rx="5" fill="#334155" />
+                    <text x="78" y="342" font-size="9" font-weight="700" fill="#ffffff" text-anchor="middle">JR仙石線</text>
+
+                    <!-- 国道45号線 -->
+                    <path d="M 80,400 C 130,340 165,295 220,275 C 280,252 335,232 400,218 C 470,202 530,178 600,162 C 670,146 740,130 815,112" fill="none" stroke="#cbd5e1" stroke-width="8" stroke-linecap="round" />
+                    <path d="M 80,400 C 130,340 165,295 220,275 C 280,252 335,232 400,218 C 470,202 530,178 600,162 C 670,146 740,130 815,112" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" />
+                    <rect x="572" y="152" width="58" height="16" rx="4" fill="#64748b" />
+                    <text x="601" y="163.5" font-size="8.5" font-weight="700" fill="#ffffff" text-anchor="middle">国道45号線</text>
+
+                    <!-- 松島湾の島々 -->
+                    <ellipse cx="385" cy="256" rx="16" ry="10" fill="#235347" stroke="#143627" stroke-width="1.2" />
+                    <path d="M 495,265 C 525,252 575,262 590,288 C 605,312 580,342 540,345 C 500,348 478,325 480,295 Z" fill="#235347" stroke="#143627" stroke-width="1.5" />
+                    <text x="535" y="308" font-size="12" font-weight="800" fill="#ffffff" text-anchor="middle">福浦島</text>
+                    <ellipse cx="675" cy="335" rx="20" ry="10" fill="#235347" />
+                    <polygon points="675,316 668,331 682,331" fill="#143627" />
+
+                    <!-- 朱塗りの橋 -->
+                    <line x1="378" y1="230" x2="383" y2="246" stroke="#C84B31" stroke-width="4" stroke-linecap="round" />
+                    <path d="M 472,212 Q 492,238 510,264" fill="none" stroke="#C84B31" stroke-width="5" stroke-linecap="round" />
+                    <text x="532" y="246" font-size="9.5" font-weight="800" fill="#C84B31">朱塗りの橋(252m)</text>
+
+                    <!-- 送迎バスルート -->
+                    <path d="M 155,260 C 260,210 480,175 740,112" fill="none" stroke="#B8860B" stroke-width="3" stroke-dasharray="8 4" marker-end="url(#mBusArrow)" />
+                    <g transform="translate(585, 102)">
+                      <rect x="0" y="0" width="128" height="20" rx="10" fill="#fef3c7" stroke="#B8860B" stroke-width="1.3" />
+                      <text x="64" y="13.5" font-size="9.5" font-weight="800" fill="#78350f" text-anchor="middle">🚌 送迎バス/車 約5〜7分</text>
+                    </g>
+
+                    <!-- 徒歩観光ルート -->
+                    <path d="M 145,265 L 442,195 L 310,115 L 378,225 L 472,210 L 235,248 L 145,265" fill="none" stroke="#ffffff" stroke-width="6" stroke-linejoin="round" />
+                    <path d="M 145,265 L 442,195 L 310,115 L 378,225 L 472,210 L 235,248 L 145,265" fill="none" stroke="#C84B31" stroke-width="3.2" stroke-linejoin="round" class="map-route-flow" />
+
+                    <!-- 徒歩所要時間バッジ -->
+                    <g font-size="8.5" font-weight="800" text-anchor="middle">
+                      <rect x="285" y="216" width="48" height="15" rx="7.5" fill="#ffffff" stroke="#C84B31" stroke-width="1" />
+                      <text x="309" y="226.5" fill="#C84B31">徒歩10分</text>
+
+                      <rect x="372" y="144" width="46" height="15" rx="7.5" fill="#ffffff" stroke="#C84B31" stroke-width="1" />
+                      <text x="395" y="154.5" fill="#C84B31">徒歩8分</text>
+
+                      <rect x="308" y="168" width="46" height="15" rx="7.5" fill="#ffffff" stroke="#C84B31" stroke-width="1" />
+                      <text x="331" y="178.5" fill="#C84B31">徒歩5分</text>
+
+                      <rect x="404" y="198" width="46" height="15" rx="7.5" fill="#ffffff" stroke="#C84B31" stroke-width="1" />
+                      <text x="427" y="208.5" fill="#C84B31">徒歩5分</text>
+
+                      <rect x="172" y="236" width="46" height="15" rx="7.5" fill="#ffffff" stroke="#C84B31" stroke-width="1" />
+                      <text x="195" y="246.5" fill="#C84B31">徒歩5分</text>
+                    </g>
+
+                    <!-- スポットピン (1〜7) -->
+                    ${matsushimaSpots.map(s => {
+                      const active = s.id === activeMatsushimaId;
+                      const pinFill = s.id === 1 ? '#1B365D' : (s.id === 7 ? '#B8860B' : (s.id === 2 || s.id === 6 ? '#C84B31' : '#235347'));
+                      let labelX = 20, labelY = -11, labelW = 108;
+                      if (s.id === 1) { labelX = -50; labelY = 20; labelW = 100; }
+                      if (s.id === 3) { labelX = -45; labelY = -34; labelW = 90; }
+                      if (s.id === 4) { labelX = -35; labelY = 20; labelW = 70; }
+                      if (s.id === 5) { labelX = 20; labelY = -6; labelW = 72; }
+                      if (s.id === 6) { labelX = -35; labelY = 20; labelW = 70; }
+                      if (s.id === 7) { labelX = -65; labelY = -38; labelW = 130; }
+                      const shortName = s.name.replace('国宝 ', '').replace('瑞巌寺 ', '').replace('（出会い橋）', '').replace('大江戸温泉物語Premium ', '');
+                      return `
+                        <g class="svg-pin-node ${active ? 'active-node' : ''}" onclick="pickMatsushimaSpot(${s.id})" transform="translate(${s.svgX}, ${s.svgY})">
+                          ${active ? `<circle class="pin-ripple" cx="0" cy="0" r="20" fill="${pinFill}" />` : ''}
+                          <circle cx="0" cy="0" r="16" fill="${pinFill}" stroke="#ffffff" stroke-width="2.5" />
+                          <text x="0" y="5" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">${s.id}</text>
+                          <rect x="${labelX}" y="${labelY}" width="${labelW}" height="20" rx="5" fill="${active ? '#1B365D' : '#ffffff'}" stroke="${pinFill}" stroke-width="1.5" />
+                          <text x="${labelX + labelW/2}" y="${labelY + 14}" font-size="10" font-weight="800" fill="${active ? '#ffffff' : '#1e293b'}" text-anchor="middle">${shortName}</text>
+                        </g>
+                      `;
+                    }).join('')}
+
+                    <!-- 方位記号 -->
+                    <g transform="translate(780, 380)">
+                      <circle cx="0" cy="0" r="18" fill="#ffffff" opacity="0.9" stroke="#1B365D" stroke-width="1.5" />
+                      <polygon points="0,-13 -4,0 4,0" fill="#C84B31" />
+                      <polygon points="0,13 -4,0 4,0" fill="#64748b" />
+                      <text x="0" y="-21" font-size="9" font-weight="900" fill="#1B365D" text-anchor="middle">N</text>
+                    </g>
+                  </svg>
+                </div>
+
+                <!-- 右5列：連動詳細カード -->
+                <div class="lg:col-span-5 bg-white rounded-2xl border-2 border-[#1B365D]/25 p-4 sm:p-5 shadow-sm flex flex-col justify-between space-y-3">
+                  <div>
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                      <span class="inline-flex items-center gap-1.5 text-xs font-black text-white ${spot.badgeBg} px-3 py-1 rounded-full">
+                        <span>SPOT ${spot.id}</span>
+                        <span>｜</span>
+                        <span>${spot.time.split(' / ')[0]}</span>
+                      </span>
+                      <div class="flex items-center gap-1">
+                        <button onclick="stepMatsushimaSpot(-1)" title="前のスポット" class="w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-black cursor-pointer">
+                          <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        ${matsushimaSpots.map(s => `
+                          <button onclick="pickMatsushimaSpot(${s.id})" class="w-6 h-6 rounded-lg text-[11px] font-black transition cursor-pointer ${s.id === activeMatsushimaId ? 'bg-[#1B365D] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">${s.id}</button>
+                        `).join('')}
+                        <button onclick="stepMatsushimaSpot(1)" title="次のスポット" class="w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-black cursor-pointer">
+                          <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <h3 class="font-serif text-lg sm:text-xl font-black text-[#1B365D] mb-1">${spot.name}</h3>
+                    <p class="text-xs font-bold text-[#C84B31] mb-2.5"><i class="fa-solid fa-shoe-prints mr-1"></i>${spot.move}</p>
+
+                    <div class="bg-[#FAF8F5] rounded-xl p-2.5 mb-2.5 text-xs space-y-1 border border-slate-200/80">
+                      <p><strong>営業時間：</strong>${spot.hours}</p>
+                      <p><strong>料金目安：</strong>${spot.fee}</p>
+                    </div>
+
+                    <p class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-2.5">${spot.desc}</p>
+                    <p class="text-xs bg-amber-50 border border-amber-200 rounded-xl p-2.5 text-amber-950">
+                      <strong><i class="fa-solid fa-lightbulb text-[#B8860B] mr-1"></i>メモ：</strong>${spot.tip}
+                    </p>
+                  </div>
+
+                  <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                    <label class="inline-flex items-center gap-2 text-xs font-bold px-3 py-2 rounded-xl border cursor-pointer select-none ${isVisited ? 'bg-emerald-50 border-emerald-400 text-emerald-900' : 'bg-slate-50 border-slate-200 text-slate-700'}">
+                      <input type="checkbox" ${isVisited ? 'checked' : ''} onchange="toggleMatsuVisit(${spot.id})" class="w-4 h-4 rounded text-emerald-600 cursor-pointer">
+                      <span>${isVisited ? '訪問済 ✓' : '訪問チェック'}</span>
+                    </label>
+                    <a href="${gmapUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#1B365D] hover:bg-[#10233F] text-white text-xs font-extrabold shadow-sm transition">
+                      <i class="fa-solid fa-location-dot text-[#E6C36A]"></i>
+                      <span>Googleマップで開く</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      },
+
+      // P4: 松島・観光スポット詳細データ
+      {
+        shortTitle: "P4 松島スポット詳細",
+        fullTitle: "P4. 松島・観光スポット詳細データ",
+        icon: "fa-landmark",
+        render: () => `
+          <div class="h-full flex flex-col justify-between bg-[#FAF8F5] p-5 sm:p-8">
+            <div class="border-b-2 border-[#235347]/20 pb-3 mb-4">
+              <span class="inline-block bg-[#235347] text-white text-xs font-black px-3 py-0.5 rounded-md mb-1">MATSUSHIMA SPOT GUIDE</span>
+              <h2 class="font-serif text-xl sm:text-3xl font-black text-[#1B365D]">松島・主要5スポットの拝観料・営業時間＆見どころ</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5 my-auto">
+              ${matsushimaSpots.slice(1, 6).map(s => `
+                <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm hover-lift flex flex-col justify-between">
+                  <div>
+                    <div class="flex items-center gap-2 mb-2">
+                      <span class="w-6 h-6 rounded-full ${s.badgeBg} text-white font-black text-xs flex items-center justify-center flex-shrink-0">${s.id}</span>
+                      <h3 class="font-serif font-black text-sm sm:text-base text-[#1B365D]">${s.name}</h3>
+                    </div>
+                    <div class="bg-[#FAF8F5] rounded-xl p-2 text-[11px] space-y-1 mb-2 border border-slate-200/70">
+                      <p><i class="fa-regular fa-clock text-[#235347] mr-1"></i><strong>時間：</strong>${s.hours}</p>
+                      <p><i class="fa-solid fa-ticket text-[#C84B31] mr-1"></i><strong>料金：</strong>${s.fee}</p>
+                    </div>
+                    <p class="text-xs text-slate-700 leading-relaxed">${s.desc}</p>
+                  </div>
+                  <p class="text-[11px] text-amber-900 bg-amber-50/80 rounded-lg p-2 mt-2.5 border border-amber-200/70">
+                    <strong>ポイント：</strong>${s.tip}
+                  </p>
+                </div>
+              `).join('')}
+
+              <div class="bg-gradient-to-br from-[#1B365D] to-[#235347] text-white rounded-2xl p-4 shadow-sm flex flex-col justify-between">
+                <div>
+                  <span class="inline-block bg-[#E6C36A] text-slate-950 text-[11px] font-black px-2.5 py-0.5 rounded mb-2">11月下旬の松島アドバイス</span>
+                  <h3 class="font-serif text-base font-black mb-2">日没16:20頃に合わせた効率ルート</h3>
+                  <p class="text-xs text-slate-200 leading-relaxed">
+                    11月下旬の宮城県は16:20頃に日没を迎えます。拝観受付が16:00前後に終了する<strong>瑞巌寺 → 五大堂 → 福浦橋 → 観瀾亭</strong>の順に回ることで、すべてのスポットを明るい時間帯に無理なく制覇できます。
+                  </p>
+                </div>
+                <div class="mt-3 pt-2 border-t border-white/15 text-[11px] text-amber-200 font-bold">
+                  <i class="fa-solid fa-suitcase-rolling mr-1"></i>15:45頃に松島海岸駅のロッカーへ戻ります
+                </div>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      // P5: 宿泊先「大江戸温泉物語Premium ホテル壮観」
+      {
+        shortTitle: "P5 ホテル壮観",
+        fullTitle: "P5. 宿泊先：大江戸温泉物語Premium ホテル壮観",
+        icon: "fa-hot-tub-person",
+        render: () => `
+          <div class="h-full flex flex-col justify-between bg-[#FAF8F5] p-5 sm:p-8">
+            <div class="border-b-2 border-[#B8860B]/30 pb-3 mb-4 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <span class="inline-block bg-[#B8860B] text-white text-xs font-black px-3 py-0.5 rounded-md mb-1">ACCOMMODATION ｜ 11月22日(日) 宿泊</span>
+                <h2 class="font-serif text-xl sm:text-3xl font-black text-[#1B365D]">大江戸温泉物語Premium ホテル壮観</h2>
+              </div>
+              <span class="text-xs font-bold text-slate-600 bg-white px-3 py-1.5 rounded-xl border border-slate-200">
+                <i class="fa-solid fa-location-dot text-[#C84B31] mr-1"></i>宮城県宮城郡松島町磯崎字浜1-1
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-auto">
+              <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover-lift">
+                <div class="w-11 h-11 rounded-2xl bg-amber-100 text-[#B8860B] flex items-center justify-center text-xl mb-3">
+                  <i class="fa-solid fa-wine-glass"></i>
+                </div>
+                <h3 class="font-serif text-lg font-black text-[#1B365D] mb-2">プレミアムラウンジ</h3>
+                <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                  宿泊者専用のラウンジで、生ビールやワイン・ハイボール・ソフトドリンク・アイスキャンディーを無料で楽しめます。チェックイン後や湯上がりのひとときに最適です。
+                </p>
+              </div>
+
+              <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover-lift">
+                <div class="w-11 h-11 rounded-2xl bg-teal-100 text-[#235347] flex items-center justify-center text-xl mb-3">
+                  <i class="fa-solid fa-water"></i>
+                </div>
+                <h3 class="font-serif text-lg font-black text-[#1B365D] mb-2">温泉露天風呂＆大浴場</h3>
+                <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                  松島の海風を感じる開放的な庭園露天風呂と広々とした大浴場で、1日歩いた疲れをじっくり癒やせます。朝風呂も早朝から利用可能です。
+                </p>
+              </div>
+
+              <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover-lift">
+                <div class="w-11 h-11 rounded-2xl bg-red-100 text-[#C84B31] flex items-center justify-center text-xl mb-3">
+                  <i class="fa-solid fa-utensils"></i>
+                </div>
+                <h3 class="font-serif text-lg font-black text-[#1B365D] mb-2">三陸グルメバイキング</h3>
+                <p class="text-xs sm:text-sm text-slate-700 leading-relaxed">
+                  ライブキッチンで焼き上げる熱々ステーキや揚げたて天ぷら、宮城・三陸の新鮮な魚介や郷土料理など、豊富なメニューを好きなだけ味わえます。
+                </p>
+              </div>
+            </div>
+
+            <!-- 翌朝7:00出発に向けた超重要アクションボックス -->
+            <div class="mt-4 bg-[#1B365D] text-white rounded-2xl p-4 sm:p-5 border-2 border-[#E6C36A] shadow-md">
+              <div class="flex items-start gap-3">
+                <span class="w-9 h-9 rounded-xl bg-[#C84B31] text-white flex items-center justify-center text-base flex-shrink-0 mt-0.5">
+                  <i class="fa-solid fa-bell-concierge"></i>
+                </span>
+                <div class="text-xs sm:text-sm space-y-1">
+                  <p class="font-black text-[#E6C36A] text-sm sm:text-base">
+                    【超重要】11/22(日) チェックイン時にフロントで行う3つの手続き
+                  </p>
+                  <p class="text-slate-100 leading-relaxed">
+                    ① <strong>翌朝（23日）07:00ちょうど出発で「松島海岸駅」まで行くタクシー1台</strong>の配車予約を依頼する（07:11発の仙石線に乗るため必須）。<br>
+                    ② 翌朝スムーズに出発できるよう、チェックイン時または夕食後に<strong>宿泊税等の事前精算</strong>を済ませておく。<br>
+                    ③ 07:00出発のためホテル朝食バイキングには間に合わないため、<strong>翌朝用のパン・おにぎり・お茶</strong>を売店等で用意しておく。
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      // P6: 2日目（11/23 月・祝）確定タイムスケジュール
+      {
+        shortTitle: "P6 2日目行程",
+        fullTitle: "P6. 2日目（11/23 月・祝）確定タイムスケジュール",
+        icon: "fa-ship",
+        render: () => `
+          <div class="h-full flex flex-col justify-between bg-[#FAF8F5] p-5 sm:p-8">
+            <div class="border-b-2 border-[#C84B31]/25 pb-3 mb-4 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <span class="inline-block bg-[#C84B31] text-white text-xs font-black px-3 py-0.5 rounded-md mb-1">DAY 2 ｜ 11月23日（月・祝）休日ダイヤ</span>
+                <h2 class="font-serif text-xl sm:text-3xl font-black text-[#1B365D]">2日目：朝一フェリーで田代島猫巡り＆帰路</h2>
+              </div>
+              <button onclick="navigateToPage(6)" class="text-xs font-extrabold px-3 py-2 rounded-xl bg-[#C84B31] text-white hover:opacity-90 transition cursor-pointer">
+                <i class="fa-solid fa-cat mr-1 text-amber-200"></i>田代島マップを見る
+              </button>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 my-auto">
+              <!-- 左：早朝移動＆田代島猫巡り -->
+              <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-2.5">
+                <h3 class="font-serif text-base sm:text-lg font-black text-[#1B365D] flex items-center gap-2 border-b border-slate-100 pb-2">
+                  <i class="fa-solid fa-ship text-[#235347]"></i>
+                  <span>午前〜昼：石巻港へ移動＆田代島猫巡り</span>
+                </h3>
+                <ul class="space-y-2 text-xs sm:text-sm">
+                  <li class="flex gap-3">
+                    <span class="font-black text-[#C84B31] w-14 flex-shrink-0">07:00</span>
+                    <div><strong>ホテル壮観 出発</strong>（予約タクシーで松島海岸駅へ／約5〜7分）<br><span class="text-slate-500 text-xs">※朝7時頃に網地島ライン公式HPで当日の運航状況を確認</span></div>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="font-black text-[#1B365D] w-14 flex-shrink-0">07:11</span>
+                    <div><strong>松島海岸駅 出発</strong>（JR仙石線・石巻行き）→ <strong>07:52 石巻駅 着</strong></div>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="font-black text-[#1B365D] w-14 flex-shrink-0">08:20</span>
+                    <div><strong>網地島ライン 石巻中央発着所 着</strong>（石巻駅ロッカー預け後、タクシー約5分/徒歩約15分）<br><span class="text-xs font-bold text-[#C84B31]">※窓口で乗船名簿記入・往復乗船券（現金のみ）を購入</span></div>
+                  </li>
+                  <li class="flex gap-3 bg-amber-50/90 p-2 rounded-xl border border-amber-200">
+                    <span class="font-black text-[#B8860B] w-14 flex-shrink-0">09:00</span>
+                    <div>
+                      <strong>石巻中央発着所 出航 → 09:36 大泊港 着</strong><br>
+                      <span class="text-xs text-slate-700">10:10 猫神社 → 10:40 島のえき → 11:30 仁斗田集落・クロネコ堂・マンガアイランド（猫観察＆写真撮影満喫）</span>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+
+              <!-- 右：午後の帰路タイムライン -->
+              <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-2.5">
+                <h3 class="font-serif text-base sm:text-lg font-black text-[#C84B31] flex items-center gap-2 border-b border-slate-100 pb-2">
+                  <i class="fa-solid fa-train-subway text-[#1B365D]"></i>
+                  <span>午後〜夜：仁斗田港出航＆やまびこ64号で帰路</span>
+                </h3>
+                <ul class="space-y-2 text-xs sm:text-sm">
+                  <li class="flex gap-3">
+                    <span class="font-black text-[#C84B31] w-14 flex-shrink-0">13:40</span>
+                    <div><strong>田代島（仁斗田港） 出航</strong>（網地島ライン昼便）→ <strong>14:25頃 石巻港 着</strong><br><span class="text-slate-500 text-xs">※朝、乗船券購入時に窓口の時刻表で出航時刻を最終確認</span></div>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="font-black text-[#1B365D] w-14 flex-shrink-0">15:56</span>
+                    <div><strong>石巻駅 出発</strong>（JR仙石東北ライン 快速・仙台行き）→ <strong>16:54 仙台駅 着</strong><br><span class="text-slate-500 text-xs">※1本前の14:58発に間に合えば15:54仙台駅着でお土産選びがさらに余裕に！</span></div>
+                  </li>
+                  <li class="flex gap-3 bg-amber-50/90 p-2 rounded-xl border border-amber-300">
+                    <span class="font-black text-[#B8860B] w-14 flex-shrink-0">17:24</span>
+                    <div>
+                      <strong class="text-amber-950">仙台駅 出発（東北新幹線「やまびこ64号」東京行き）</strong><br>
+                      <span class="text-xs font-bold text-slate-800">グランクラス 10号車2番B・C席（座席のみ営業・ICタッチ乗車）</span>
+                    </div>
+                  </li>
+                  <li class="flex gap-3">
+                    <span class="font-black text-[#1B365D] w-14 flex-shrink-0">19:03</span>
+                    <div><strong>大宮駅 到着</strong> → JR埼京線（19:12発または19:18発・武蔵浦和乗換）＋JR武蔵野線で <strong>19:39〜19:47 北朝霞駅 帰着</strong></div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      // P7: 田代島インタラクティブ縦断マップ
+      {
+        shortTitle: "P7 田代島マップ",
+        fullTitle: "P7. 田代島インタラクティブ縦断マップ",
+        icon: "fa-cat",
+        render: () => {
+          const spot = tashiroSpots.find(s => s.id === activeTashiroId) || tashiroSpots[0];
+          const isVisited = !!tashiroVisited[spot.id];
+          const gmapUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(spot.mapQuery)}`;
+          const vb = tashiroZoomed
+            ? `${Math.max(0, Math.min(420, spot.svgX - 180))} ${Math.max(0, Math.min(200, spot.svgY - 115))} 400 230`
+            : "0 0 820 430";
+          return `
+            <div class="h-full flex flex-col justify-between bg-[#FAF8F5] p-4 sm:p-7">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+                <div>
+                  <span class="inline-block bg-[#C84B31] text-white text-[11px] font-black px-2.5 py-0.5 rounded mb-1">DAY 2 ISLAND MAP</span>
+                  <h2 class="font-serif text-xl sm:text-2xl font-black text-[#1B365D]">田代島・北から南へ王道縦断マップ（約3.5〜4km）</h2>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <button onclick="setTashiroZoom(false)" class="px-3 py-1.5 rounded-xl text-xs font-extrabold transition cursor-pointer ${!tashiroZoomed ? 'bg-[#1B365D] text-white shadow-sm' : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'}">
+                    <i class="fa-solid fa-map mr-1"></i>全体表示
+                  </button>
+                  <button onclick="setTashiroZoom(true)" class="px-3 py-1.5 rounded-xl text-xs font-extrabold transition cursor-pointer ${tashiroZoomed ? 'bg-[#1B365D] text-white shadow-sm' : 'bg-white border border-slate-300 text-slate-700 hover:bg-slate-50'}">
+                    <i class="fa-solid fa-magnifying-glass-plus text-[#E6C36A] mr-1"></i>選択地点拡大
+                  </button>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 my-auto items-stretch">
+                <!-- 左7列：詳細SVGイラストマップ -->
+                <div class="lg:col-span-7 bg-[#cbe6ec] rounded-2xl border-2 border-[#1B365D]/20 overflow-hidden shadow-sm flex flex-col justify-between">
+                  <div class="bg-white/90 px-3 py-1.5 border-b border-slate-200 flex flex-wrap items-center justify-between gap-2 text-[11px] font-bold">
+                    <div class="flex items-center gap-3 flex-wrap">
+                      <span class="inline-flex items-center gap-1 text-[#C84B31]">
+                        <span class="w-4 h-0.5 border-t-2 border-dashed border-[#C84B31] inline-block"></span>メイン縦断ルート(1→2→3→4→5→7)
+                      </span>
+                      <span class="inline-flex items-center gap-1 text-[#235347]">
+                        <span class="w-4 h-0.5 border-t-2 border-dashed border-[#235347] inline-block"></span>寄り道(5↔6)
+                      </span>
+                    </div>
+                    <span class="text-slate-500 hidden sm:inline">🚻 トイレ：①・③・⑦のみ</span>
+                  </div>
+
+                  <svg viewBox="${vb}" class="w-full h-auto block" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <linearGradient id="tSeaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#cbe8ee" />
+                        <stop offset="55%" stop-color="#8ec7d4" />
+                        <stop offset="100%" stop-color="#64a9b9" />
+                      </linearGradient>
+                      <marker id="tFerryArrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                        <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#1B365D" />
+                      </marker>
+                    </defs>
+
+                    <rect x="0" y="0" width="820" height="430" fill="url(#tSeaGrad)" />
+                    <g stroke="#ffffff" stroke-width="1.4" stroke-opacity="0.45" fill="none">
+                      <path d="M 65 115 Q 85 105 105 115 T 145 115" />
+                      <path d="M 650 130 Q 670 120 690 130 T 730 130" />
+                      <path d="M 660 320 Q 680 310 700 320 T 740 320" />
+                    </g>
+                    <text x="115" y="395" font-size="16" font-weight="800" fill="#1B365D" opacity="0.25" letter-spacing="4">石 巻 湾</text>
+                    <text x="705" y="230" font-size="16" font-weight="800" fill="#1B365D" opacity="0.25" letter-spacing="4">太 平 洋</text>
+
+                    <!-- 航路 -->
+                    <path d="M 45,50 Q 150,62 265,75" fill="none" stroke="#1B365D" stroke-width="2.2" stroke-dasharray="5 4" marker-end="url(#tFerryArrow)" />
+                    <g transform="translate(24, 18)">
+                      <rect x="0" y="0" width="176" height="21" rx="10.5" fill="#ffffff" stroke="#1B365D" stroke-width="1.3" />
+                      <text x="88" y="14" font-size="10" font-weight="800" fill="#1B365D" text-anchor="middle">⛴ 往路 09:00石巻発 → 09:36着</text>
+                    </g>
+                    <path d="M 300,340 Q 175,355 45,335" fill="none" stroke="#C84B31" stroke-width="2.2" stroke-dasharray="5 4" marker-end="url(#tFerryArrow)" />
+                    <g transform="translate(26, 355)">
+                      <rect x="0" y="0" width="182" height="21" rx="10.5" fill="#ffffff" stroke="#C84B31" stroke-width="1.3" />
+                      <text x="91" y="14" font-size="10" font-weight="800" fill="#C84B31" text-anchor="middle">⛴ 復路 13:40仁斗田発 → 石巻へ</text>
+                    </g>
+
+                    <!-- 田代島の地形 -->
+                    <path d="M 295,35 C 345,30 405,48 455,78 C 505,110 550,148 565,192 C 580,235 578,295 552,338 C 525,380 465,405 405,402 C 350,400 315,378 302,350 C 288,325 322,312 315,290 C 308,268 265,258 252,225 C 240,192 258,152 248,120 C 240,92 265,86 282,75 Z"
+                          fill="#f4ead7" stroke="#c7b596" stroke-width="2.5" />
+                    <ellipse cx="425" cy="145" rx="68" ry="45" fill="#9bc28c" opacity="0.45" />
+                    <ellipse cx="465" cy="310" rx="62" ry="42" fill="#9bc28c" opacity="0.4" />
+                    <g fill="#4c7542" opacity="0.65">
+                      <polygon points="435,105 428,120 442,120" /><polygon points="435,115 426,131 444,131" />
+                      <polygon points="505,165 498,180 512,180" /><polygon points="505,175 496,191 514,191" />
+                      <polygon points="515,285 508,300 522,300" />
+                    </g>
+                    <path d="M 265,75 L 245,88 L 254,96" fill="none" stroke="#78716c" stroke-width="4" stroke-linecap="round" />
+                    <path d="M 306,342 L 280,336 L 276,352" fill="none" stroke="#78716c" stroke-width="5" stroke-linecap="round" />
+
+                    <!-- メイン縦断ルート -->
+                    <path d="M 282,75 Q 330,105 375,140 Q 382,165 380,190 Q 370,220 355,250 Q 345,275 338,295 Q 324,318 312,340"
+                          fill="none" stroke="#ffffff" stroke-width="6" stroke-linecap="round" />
+                    <path d="M 282,75 Q 330,105 375,140 Q 382,165 380,190 Q 370,220 355,250 Q 345,275 338,295 Q 324,318 312,340"
+                          fill="none" stroke="#C84B31" stroke-width="3.2" stroke-linecap="round" class="map-route-flow" />
+                    <path d="M 338,295 Q 400,315 462,338" fill="none" stroke="#235347" stroke-width="2.5" stroke-dasharray="4 4" />
+
+                    <!-- 徒歩時間バッジ -->
+                    <g font-size="8.5" font-weight="800" text-anchor="middle">
+                      <rect x="268" y="108" width="56" height="15" rx="7.5" fill="#ffffff" stroke="#C84B31" stroke-width="1" />
+                      <text x="296" y="118.5" fill="#C84B31">坂道約20分</text>
+
+                      <rect x="315" y="160" width="50" height="15" rx="7.5" fill="#ffffff" stroke="#C84B31" stroke-width="1" />
+                      <text x="340" y="170.5" fill="#C84B31">徒歩約5分</text>
+
+                      <rect x="380" y="216" width="56" height="15" rx="7.5" fill="#ffffff" stroke="#C84B31" stroke-width="1" />
+                      <text x="408" y="226.5" fill="#C84B31">下り約15分</text>
+
+                      <rect x="382" y="294" width="60" height="15" rx="7.5" fill="#ffffff" stroke="#235347" stroke-width="1" />
+                      <text x="412" y="304.5" fill="#235347">寄り道12分</text>
+                    </g>
+
+                    <!-- スポットピン (1〜7) -->
+                    ${tashiroSpots.map(s => {
+                      const active = s.id === activeTashiroId;
+                      const pinFill = (s.id === 1 || s.id === 7) ? '#1B365D' : (s.id === 6 ? '#235347' : (s.id === 2 || s.id === 4 ? '#C84B31' : '#B8860B'));
+                      let labelX = 20, labelY = -10, labelW = 105;
+                      if (s.id === 4) { labelX = -112; labelW = 92; }
+                      if (s.id === 5) { labelX = -132; labelW = 112; }
+                      if (s.id === 7) { labelX = 14; labelY = 16; labelW = 108; }
+                      const shortName = s.name.replace('（おおどまりこう）', '').replace('（美與利大明神）', '').replace('（にとだしゅうらく）', '').replace('周辺', '').replace('（寄り道絶景）', '').replace('（にとだこう）', '');
+                      return `
+                        <g class="svg-pin-node ${active ? 'active-node' : ''}" onclick="pickTashiroSpot(${s.id})" transform="translate(${s.svgX}, ${s.svgY})">
+                          ${active ? `<circle class="pin-ripple" cx="0" cy="0" r="20" fill="${pinFill}" />` : ''}
+                          <circle cx="0" cy="0" r="15" fill="${pinFill}" stroke="#ffffff" stroke-width="2.5" />
+                          <text x="0" y="5" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">${s.id}</text>
+                          <rect x="${labelX}" y="${labelY}" width="${labelW}" height="20" rx="5" fill="${active ? '#1B365D' : '#ffffff'}" stroke="${pinFill}" stroke-width="1.5" />
+                          <text x="${labelX + labelW/2}" y="${labelY + 14}" font-size="10" font-weight="800" fill="${active ? '#ffffff' : '#1e293b'}" text-anchor="middle">${shortName}</text>
+                        </g>
+                      `;
+                    }).join('')}
+
+                    <!-- 方位記号 -->
+                    <g transform="translate(780, 385)">
+                      <circle cx="0" cy="0" r="18" fill="#ffffff" opacity="0.9" stroke="#1B365D" stroke-width="1.5" />
+                      <polygon points="0,-13 -4,0 4,0" fill="#C84B31" />
+                      <polygon points="0,13 -4,0 4,0" fill="#64748b" />
+                      <text x="0" y="-21" font-size="9" font-weight="900" fill="#1B365D" text-anchor="middle">N</text>
+                    </g>
+                  </svg>
+                </div>
+
+                <!-- 右5列：連動詳細カード -->
+                <div class="lg:col-span-5 bg-white rounded-2xl border-2 border-[#C84B31]/25 p-4 sm:p-5 shadow-sm flex flex-col justify-between space-y-3">
+                  <div>
+                    <div class="flex items-center justify-between gap-2 mb-2">
+                      <span class="inline-flex items-center gap-1.5 text-xs font-black text-white ${spot.badgeBg} px-3 py-1 rounded-full">
+                        <span>SPOT ${spot.id}</span>
+                        <span>｜</span>
+                        <span>${spot.time.split('（')[0]}</span>
+                      </span>
+                      <div class="flex items-center gap-1">
+                        <button onclick="stepTashiroSpot(-1)" title="前の地点" class="w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-black cursor-pointer">
+                          <i class="fa-solid fa-chevron-left"></i>
+                        </button>
+                        ${tashiroSpots.map(s => `
+                          <button onclick="pickTashiroSpot(${s.id})" class="w-6 h-6 rounded-lg text-[11px] font-black transition cursor-pointer ${s.id === activeTashiroId ? 'bg-[#C84B31] text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}">${s.id}</button>
+                        `).join('')}
+                        <button onclick="stepTashiroSpot(1)" title="次の地点" class="w-6 h-6 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-black cursor-pointer">
+                          <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                      </div>
+                    </div>
+
+                    <h3 class="font-serif text-lg sm:text-xl font-black text-[#1B365D] mb-1">${spot.name}</h3>
+                    <p class="text-xs font-bold text-[#235347] mb-2.5"><i class="fa-solid fa-shoe-prints mr-1"></i>${spot.move}</p>
+
+                    <div class="bg-[#FAF8F5] rounded-xl p-2.5 mb-2.5 text-xs border border-slate-200/80">
+                      <p><strong>設備・目安：</strong>${spot.facilities} ／ ${spot.time}</p>
+                    </div>
+
+                    <p class="text-xs sm:text-sm text-slate-700 leading-relaxed mb-2.5">${spot.desc}</p>
+                    <p class="text-xs bg-amber-50 border border-amber-200 rounded-xl p-2.5 text-amber-950">
+                      <strong><i class="fa-solid fa-cat text-[#C84B31] mr-1"></i>散策メモ：</strong>${spot.tip}
+                    </p>
+                  </div>
+
+                  <div class="flex items-center justify-between gap-2 pt-2 border-t border-slate-100">
+                    <label class="inline-flex items-center gap-2 text-xs font-bold px-3 py-2 rounded-xl border cursor-pointer select-none ${isVisited ? 'bg-amber-50 border-[#B8860B] text-amber-950' : 'bg-slate-50 border-slate-200 text-slate-700'}">
+                      <input type="checkbox" ${isVisited ? 'checked' : ''} onchange="toggleTashiroVisit(${spot.id})" class="w-4 h-4 rounded text-[#C84B31] cursor-pointer">
+                      <span>${isVisited ? '猫スタンプ済 🐾' : '訪問スタンプ'}</span>
+                    </label>
+                    <a href="${gmapUrl}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#1B365D] hover:bg-[#10233F] text-white text-xs font-extrabold shadow-sm transition">
+                      <i class="fa-solid fa-location-dot text-[#E6C36A]"></i>
+                      <span>Googleマップで開く</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        }
+      },
+
+      // P8: 田代島・観光スポット詳細＆島内ルール・お土産
+      {
+        shortTitle: "P8 田代島詳細＆ルール",
+        fullTitle: "P8. 田代島・観光詳細＆島内ルール・お土産",
+        icon: "fa-shield-cat",
+        render: () => `
+          <div class="h-full flex flex-col justify-between bg-[#FAF8F5] p-5 sm:p-8">
+            <div class="border-b-2 border-[#C84B31]/25 pb-3 mb-4">
+              <span class="inline-block bg-[#C84B31] text-white text-xs font-black px-3 py-0.5 rounded-md mb-1">TASHIROJIMA GUIDE & RULES</span>
+              <h2 class="font-serif text-xl sm:text-3xl font-black text-[#1B365D]">田代島の見どころ・お土産＆島内重要ルール</h2>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 my-auto">
+              <!-- 左：島内スポット＆お土産・食堂ガイド -->
+              <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-3">
+                <h3 class="font-serif text-base sm:text-lg font-black text-[#1B365D] flex items-center gap-2 border-b border-slate-100 pb-2">
+                  <i class="fa-solid fa-gift text-[#B8860B]"></i>
+                  <span>島内スポット・限定お土産＆食事の注意点</span>
+                </h3>
+                <ul class="space-y-2.5 text-xs sm:text-sm text-slate-700">
+                  <li>
+                    <strong class="text-[#C84B31]">⛩ 猫神社（美與利大明神）：</strong>大漁・開運の猫神様を祀る森の祠。参拝者の猫イラスト絵馬やお守りが人気です。
+                  </li>
+                  <li>
+                    <strong class="text-[#B8860B]">🏫 田代島 島のえき：</strong>旧校舎を活用した休憩・交流施設。<strong>島限定オリジナル猫グッズ（手ぬぐい・トートバッグ・缶バッジ）</strong>や軽食・カフェメニューを販売。
+                  </li>
+                  <li>
+                    <strong class="text-[#235347]">☕ クロネコ堂・田代食堂周辺：</strong>仁斗田集落の商店ではドリンクやお菓子、手作り猫雑貨が並びます。
+                  </li>
+                  <li class="bg-amber-50 border border-amber-200 rounded-xl p-2.5 text-xs text-amber-950">
+                    <strong><i class="fa-solid fa-utensils text-[#C84B31] mr-1"></i>食堂・カフェの注意点：</strong>離島のため不定休・臨時休業や昼前の売り切れがあります。<strong>朝の石巻駅（NewDays等）や前日の松島で軽食・お茶を少し持参しておく</strong>と安心です！
+                  </li>
+                </ul>
+              </div>
+
+              <!-- 右：必ず守るべき島内ルール＆決済・設備 -->
+              <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-3">
+                <h3 class="font-serif text-base sm:text-lg font-black text-[#C84B31] flex items-center gap-2 border-b border-slate-100 pb-2">
+                  <i class="fa-solid fa-triangle-exclamation text-[#C84B31]"></i>
+                  <span>猫と島を守るルール・現金＆設備ガイド</span>
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 text-xs">
+                  <div class="bg-red-50 border border-red-200 rounded-xl p-3">
+                    <p class="font-extrabold text-red-900 mb-1"><i class="fa-solid fa-ban mr-1"></i>無断エサやり・抱っこ禁止</p>
+                    <p class="text-red-950/85 leading-relaxed">猫の健康管理のため、おやつの持ち込み・給餌や無理な抱っこは厳禁です。</p>
+                  </div>
+                  <div class="bg-slate-50 border border-slate-200 rounded-xl p-3">
+                    <p class="font-extrabold text-[#1B365D] mb-1"><i class="fa-solid fa-camera mr-1"></i>フラッシュ撮影厳禁</p>
+                    <p class="text-slate-600 leading-relaxed">猫の目を傷めるためフラッシュOFF。しゃがんで低い目線から撮影しましょう。</p>
+                  </div>
+                  <div class="bg-amber-50 border border-amber-200 rounded-xl p-3">
+                    <p class="font-extrabold text-amber-950 mb-1"><i class="fa-solid fa-yen-sign mr-1"></i>現金のみ（旧千円札推奨）</p>
+                    <p class="text-amber-950/85 leading-relaxed">網地島ライン券売機（大人往復2,500円）は現金のみ・新札非対応の場合あり。島内もすべて現金決済です。</p>
+                  </div>
+                  <div class="bg-teal-50 border border-teal-200 rounded-xl p-3">
+                    <p class="font-extrabold text-[#235347] mb-1"><i class="fa-solid fa-restroom mr-1"></i>トイレ＆ゴミ持ち帰り</p>
+                    <p class="text-slate-700 leading-relaxed">トイレは<strong>大泊港・島のえき・仁斗田港</strong>のみ。ゴミ箱はないため必ず本土へ持ち帰ります。</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      // P9: 旅の予習動画（YouTube埋め込み）
+      {
+        shortTitle: "P9 予習動画",
+        fullTitle: "P9. 旅の予習動画（ホテル壮観・田代島）",
+        icon: "fa-circle-play",
+        render: () => `
+          <div class="h-full flex flex-col justify-between bg-[#FAF8F5] p-5 sm:p-8">
+            <div class="border-b-2 border-[#1B365D]/15 pb-3 mb-4">
+              <span class="inline-block bg-[#1B365D] text-[#E6C36A] text-xs font-black px-3 py-0.5 rounded-md mb-1">PREVIEW VIDEOS</span>
+              <h2 class="font-serif text-xl sm:text-3xl font-black text-[#1B365D]">出発前にチェック！宿泊先＆田代島の予習動画</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 my-auto">
+              <!-- 動画1: 大江戸温泉物語Premium ホテル壮観 -->
+              <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between">
+                <div>
+                  <span class="inline-block bg-amber-100 text-amber-900 text-[11px] font-black px-2.5 py-0.5 rounded mb-2">DAY 1 宿泊先</span>
+                  <h3 class="font-serif text-base sm:text-lg font-black text-[#1B365D] mb-2">大江戸温泉物語Premium ホテル壮観</h3>
+                  <div class="relative w-full pt-[56.25%] rounded-xl overflow-hidden bg-slate-900 mb-3">
+                    <iframe class="absolute inset-0 w-full h-full" src="https://www.youtube.com/embed/videoseries?list=PLqP_281x04hT0oT12o8m1lS-s9aE2jQ7I" title="大江戸温泉物語Premium ホテル壮観 紹介" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                  </div>
+                  <p class="text-xs text-slate-600 leading-relaxed">
+                    松島湾を望む露天風呂やプレミアムラウンジ、ライブキッチンバイキングの雰囲気を事前にチェックできます。
+                  </p>
+                </div>
+                <a href="https://www.youtube.com/results?search_query=%E5%A4%A7%E6%B1%9F%E6%88%B8%E6%B8%A9%E6%B3%89%E7%89%A9%E8%AA%9EPremium+%E3%83%9B%E3%83%86%E3%83%AB%E5%A3%AE%E8%A6%B3" target="_blank" rel="noopener noreferrer" class="mt-3 inline-flex items-center justify-center gap-1.5 text-xs font-extrabold text-[#1B365D] bg-slate-100 hover:bg-slate-200 py-2 rounded-xl transition">
+                  <i class="fa-brands fa-youtube text-red-600 text-sm"></i>
+                  <span>YouTubeで関連動画を検索する</span>
+                </a>
+              </div>
+
+              <!-- 動画2: 田代島（猫の島） -->
+              <div class="bg-white rounded-2xl border border-slate-200 p-4 shadow-sm flex flex-col justify-between">
+                <div>
+                  <span class="inline-block bg-red-100 text-[#C84B31] text-[11px] font-black px-2.5 py-0.5 rounded mb-2">DAY 2 目的地</span>
+                  <h3 class="font-serif text-base sm:text-lg font-black text-[#1B365D] mb-2">宮城県石巻市・田代島（猫の島）散策</h3>
+                  <div class="relative w-full pt-[56.25%] rounded-xl overflow-hidden bg-slate-900 mb-3">
+                    <iframe class="absolute inset-0 w-full h-full" src="https://www.youtube.com/embed?listType=search&list=%E7%94%B0%E4%BB%A3%E5%B3%B6+%E7%8C%AB%E3%81%AE%E5%B3%B6+%E8%A6%B3%E5%85%89" title="田代島 観光紹介" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                  </div>
+                  <p class="text-xs text-slate-600 leading-relaxed">
+                    網地島ラインのフェリー航路や大泊港・猫神社・島のえき・仁斗田集落の猫たちの様子をイメージできます。
+                  </p>
+                </div>
+                <a href="https://www.youtube.com/results?search_query=%E7%94%B0%E4%BB%A3%E5%B3%B6+%E7%8C%AB%E3%81%AE%E5%B3%B6+%E8%A6%B3%E5%85%89" target="_blank" rel="noopener noreferrer" class="mt-3 inline-flex items-center justify-center gap-1.5 text-xs font-extrabold text-[#1B365D] bg-slate-100 hover:bg-slate-200 py-2 rounded-xl transition">
+                  <i class="fa-brands fa-youtube text-red-600 text-sm"></i>
+                  <span>YouTubeで田代島の動画を見る</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      // P10: 帰りの仙台駅おすすめお土産＆駅弁
+      {
+        shortTitle: "P10 仙台お土産・駅弁",
+        fullTitle: "P10. 帰りの仙台駅おすすめお土産＆駅弁",
+        icon: "fa-bag-shopping",
+        render: () => `
+          <div class="h-full flex flex-col justify-between bg-[#FAF8F5] p-5 sm:p-8">
+            <div class="border-b-2 border-[#B8860B]/30 pb-3 mb-4 flex flex-wrap items-center justify-between gap-2">
+              <div>
+                <span class="inline-block bg-[#B8860B] text-white text-xs font-black px-3 py-0.5 rounded-md mb-1">SENDAI SOUVENIRS & EKIBEN</span>
+                <h2 class="font-serif text-xl sm:text-3xl font-black text-[#1B365D]">仙台駅おすすめお土産＆新幹線車内グルメ</h2>
+              </div>
+              <span class="text-xs font-extrabold bg-amber-100 text-amber-950 px-3 py-1.5 rounded-xl border border-amber-300">
+                17:24発「やまびこ64号」乗車前に購入！
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-auto">
+              <!-- 王道銘菓・スイーツ -->
+              <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-2.5">
+                <h3 class="font-serif text-base font-black text-[#C84B31] border-b border-slate-100 pb-2">
+                  <i class="fa-solid fa-cookie-bite mr-1.5"></i>王道の銘菓・スイーツ
+                </h3>
+                <ul class="space-y-2 text-xs text-slate-700 leading-relaxed">
+                  <li><strong>菓匠三全「萩の月」：</strong>ふんわりカステラと濃厚カスタードの不動の定番土産。</li>
+                  <li><strong>シーラカンス モナカ：</strong>小豆餡にフランス産発酵バターとゲランド塩を挟んだ甘じょっぱい大人気モナカ（エスパル東館等）。</li>
+                  <li><strong>白松がモナカ本舗「白松がモナカ」：</strong>香ばしい皮と上品な餡が魅力の老舗銘菓。</li>
+                </ul>
+              </div>
+
+              <!-- ずんだ系＆おつまみ -->
+              <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-2.5">
+                <h3 class="font-serif text-base font-black text-[#235347] border-b border-slate-100 pb-2">
+                  <i class="fa-solid fa-leaf mr-1.5"></i>ずんだ系＆牛たんおつまみ
+                </h3>
+                <ul class="space-y-2 text-xs text-slate-700 leading-relaxed">
+                  <li><strong>喜久水庵「喜久福」：</strong>ずんだ餡と生クリームを包んだ大福（保冷剤対応）。</li>
+                  <li><strong>ずんだ茶寮「ずんだシェイク」：</strong>新幹線ホームへ向かう前の移動のお供に最高！</li>
+                  <li><strong>伊達の牛たん本舗「牛たんしぐれ煮」・陣中「牛タン仙台ラー油」・阿部蒲鉾店「笹かまぼこ／チーズボール」</strong></li>
+                </ul>
+              </div>
+
+              <!-- 新幹線車内の駅弁 -->
+              <div class="bg-white rounded-2xl border border-slate-200 p-4 sm:p-5 shadow-sm space-y-2.5">
+                <h3 class="font-serif text-base font-black text-[#1B365D] border-b border-slate-100 pb-2">
+                  <i class="fa-solid fa-bento-box mr-1.5"></i>帰りの新幹線で楽しむ駅弁
+                </h3>
+                <ul class="space-y-2 text-xs text-slate-700 leading-relaxed">
+                  <li><strong>こばやし「網焼き牛たん弁当」：</strong>紐を引くと蒸気で温まる加熱式容器の定番駅弁。</li>
+                  <li><strong>伯養軒「炙りえんがわずし」「はらこめし」：</strong>宮城ならではの海の幸を味わえる人気弁当。</li>
+                </ul>
+                <div class="bg-amber-50 border border-amber-200 rounded-xl p-2.5 text-[11px] text-amber-950 mt-2">
+                  <strong>★乗車前メモ：</strong>帰りの「やまびこ64号」10号車（グランクラス）は<strong>シートのみの営業（車内販売・飲料軽食サービスなし）</strong>のため、仙台駅改札内外でお弁当・地酒・お茶を買い込んでからご乗車ください！
+                </div>
+              </div>
+            </div>
+          </div>
+        `
+      },
+
+      // P11: 最終持ち物＆直前チェックリスト
+      {
+        shortTitle: "P11 チェックリスト",
+        fullTitle: "P11. 最終持ち物＆直前チェックリスト",
+        icon: "fa-list-check",
+        render: () => {
+          const doneCount = checklistItems.filter(i => checklistState[i.id]).length;
+          return `
+            <div class="h-full flex flex-col justify-between bg-[#FAF8F5] p-5 sm:p-8">
+              <div class="border-b-2 border-[#1B365D]/15 pb-3 mb-4 flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <span class="inline-block bg-[#C84B31] text-white text-xs font-black px-3 py-0.5 rounded-md mb-1">FINAL CHECKLIST</span>
+                  <h2 class="font-serif text-xl sm:text-3xl font-black text-[#1B365D]">出発前・当日の最終チェックリスト</h2>
+                </div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs sm:text-sm font-black bg-[#1B365D] text-[#E6C36A] px-3.5 py-1.5 rounded-xl">
+                    達成状況：${doneCount} / ${checklistItems.length}
+                  </span>
+                  <button onclick="resetAllChecklist()" class="text-xs text-slate-500 hover:text-[#C84B31] underline cursor-pointer">
+                    リセット
+                  </button>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-3 my-auto">
+                ${checklistItems.map(item => {
+                  const checked = !!checklistState[item.id];
+                  return `
+                    <label onclick="toggleChecklistItem('${item.id}')" class="bg-white rounded-2xl border-2 ${checked ? 'border-emerald-400 bg-emerald-50/40' : 'border-slate-200 hover:border-[#1B365D]/40'} p-3.5 shadow-sm cursor-pointer flex items-start gap-3 transition select-none">
+                      <input type="checkbox" ${checked ? 'checked' : ''} onchange="event.stopPropagation(); toggleChecklistItem('${item.id}')" class="w-5 h-5 mt-0.5 rounded text-emerald-600 focus:ring-emerald-500 cursor-pointer flex-shrink-0">
+                      <div class="min-w-0">
+                        <div class="flex items-center gap-2 flex-wrap mb-0.5">
+                          <span class="text-[10px] font-black px-2 py-0.5 rounded ${checked ? 'bg-emerald-600 text-white' : 'bg-[#1B365D] text-[#E6C36A]'}">${item.tag}</span>
+                          <span class="text-xs sm:text-sm font-extrabold ${checked ? 'line-through text-slate-400' : 'text-slate-900'}">${item.title}</span>
+                        </div>
+                        <p class="text-[11px] sm:text-xs text-slate-600 leading-relaxed">${item.note}</p>
+                      </div>
+                    </label>
+                  `;
+                }).join('')}
+              </div>
+            </div>
+          `;
+        }
+      }
+    ];
+
+    // ---------- 4. ナビゲーション＆描画制御 ----------
+    function renderNavigationUI() {
+      const pillContainer = document.getElementById('pill-container');
+      pillContainer.innerHTML = pages.map((p, idx) => {
+        const isCurrent = idx === currentPage && viewMode === 'slide';
+        return `
+          <button onclick="navigateToPage(${idx})" class="flex-shrink-0 px-2.5 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${isCurrent ? 'bg-[#E6C36A] text-slate-950 font-black shadow-xs' : 'text-slate-300 hover:text-white hover:bg-white/10'}">
+            ${p.shortTitle}
+          </button>
+        `;
+      }).join('');
+
+      const tocList = document.getElementById('toc-list');
+      tocList.innerHTML = pages.map((p, idx) => {
+        const isCurrent = idx === currentPage;
+        return `
+          <button onclick="navigateToPage(${idx}); toggleTocDrawer(false);" class="w-full text-left px-3.5 py-2.5 rounded-xl flex items-center gap-3 transition cursor-pointer ${isCurrent ? 'bg-[#1B365D] text-white font-extrabold shadow-sm' : 'hover:bg-white text-slate-700 font-bold'}">
+            <i class="fa-solid ${p.icon} w-4 text-center ${isCurrent ? 'text-[#E6C36A]' : 'text-[#C84B31]'}"></i>
+            <span class="text-xs sm:text-sm truncate">${p.fullTitle}</span>
+          </button>
+        `;
+      }).join('');
+
+      const doneCount = checklistItems.filter(i => checklistState[i.id]).length;
+      const totalCount = checklistItems.length;
+      const headerBadge = document.getElementById('header-check-badge');
+      const drawerBadge = document.getElementById('drawer-check-badge');
+      if (headerBadge) headerBadge.textContent = `準備 ${doneCount}/${totalCount}`;
+      if (drawerBadge) drawerBadge.textContent = `${doneCount}/${totalCount} 完了`;
+
+      const pageCounter = document.getElementById('page-counter');
+      if (pageCounter) pageCounter.textContent = `P${currentPage + 1} / ${pages.length}`;
+    }
+
+    function renderActiveView() {
+      renderNavigationUI();
+
+      if (viewMode === 'slide') {
+        const stage = document.getElementById('slide-stage');
+        stage.innerHTML = `<div class="slide-animate h-full flex-grow flex flex-col">${pages[currentPage].render()}</div>`;
+      } else {
+        const scrollView = document.getElementById('scroll-view');
+        scrollView.innerHTML = pages.map((p, idx) => `
+          <section id="scroll-page-${idx}" class="bg-white rounded-3xl border-2 border-[#1B365D]/15 shadow-lg overflow-hidden">
+            ${p.render()}
+          </section>
+        `).join('');
+      }
+    }
+
+    function switchMode(mode) {
+      viewMode = mode;
+      const slideView = document.getElementById('slide-view');
+      const scrollView = document.getElementById('scroll-view');
+      const topPillBar = document.getElementById('top-pill-bar');
+      const btnSlide = document.getElementById('btn-mode-slide');
+      const btnScroll = document.getElementById('btn-mode-scroll');
+
+      if (mode === 'slide') {
+        slideView.classList.remove('hidden');
+        scrollView.classList.add('hidden');
+        topPillBar.classList.remove('hidden');
+        btnSlide.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-extrabold bg-[#B8860B] text-white shadow-sm transition cursor-pointer flex items-center gap-1';
+        btnScroll.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold text-slate-300 hover:text-white transition cursor-pointer flex items-center gap-1';
+      } else {
+        slideView.classList.add('hidden');
+        scrollView.classList.remove('hidden');
+        topPillBar.classList.add('hidden');
+        btnScroll.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-extrabold bg-[#B8860B] text-white shadow-sm transition cursor-pointer flex items-center gap-1';
+        btnSlide.className = 'px-2.5 sm:px-3 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold text-slate-300 hover:text-white transition cursor-pointer flex items-center gap-1';
+      }
+      renderActiveView();
+    }
+
+    function navigateToPage(idx) {
+      if (idx < 0 || idx >= pages.length) return;
+      currentPage = idx;
+      if (viewMode === 'scroll') {
+        renderActiveView();
+        const target = document.getElementById(`scroll-page-${idx}`);
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        renderActiveView();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function nextPage() {
+      navigateToPage((currentPage + 1) % pages.length);
+    }
+
+    function prevPage() {
+      navigateToPage((currentPage - 1 + pages.length) % pages.length);
+    }
+
+    function toggleTocDrawer(open) {
+      const backdrop = document.getElementById('toc-drawer-backdrop');
+      const drawer = document.getElementById('toc-drawer');
+      if (open) {
+        backdrop.classList.remove('hidden');
+        drawer.classList.remove('-translate-x-full');
+      } else {
+        backdrop.classList.add('hidden');
+        drawer.classList.add('-translate-x-full');
+      }
+    }
+
+    // ---------- 5. マップ＆チェックリスト操作 ----------
+    function pickMatsushimaSpot(id) {
+      activeMatsushimaId = id;
+      renderActiveView();
+    }
+
+    function stepMatsushimaSpot(delta) {
+      const next = ((activeMatsushimaId - 1 + delta + matsushimaSpots.length) % matsushimaSpots.length) + 1;
+      activeMatsushimaId = next;
+      renderActiveView();
+    }
+
+    function setMatsushimaZoom(zoom) {
+      matsushimaZoomed = zoom;
+      renderActiveView();
+    }
+
+    function toggleMatsuVisit(id) {
+      matsushimaVisited[id] = !matsushimaVisited[id];
+      localStorage.setItem('shiori_matsu_visit_v5', JSON.stringify(matsushimaVisited));
+      renderActiveView();
+    }
+
+    function pickTashiroSpot(id) {
+      activeTashiroId = id;
+      renderActiveView();
+    }
+
+    function stepTashiroSpot(delta) {
+      const next = ((activeTashiroId - 1 + delta + tashiroSpots.length) % tashiroSpots.length) + 1;
+      activeTashiroId = next;
+      renderActiveView();
+    }
+
+    function setTashiroZoom(zoom) {
+      tashiroZoomed = zoom;
+      renderActiveView();
+    }
+
+    function toggleTashiroVisit(id) {
+      tashiroVisited[id] = !tashiroVisited[id];
+      localStorage.setItem('shiori_tashiro_visit_v5', JSON.stringify(tashiroVisited));
+      renderActiveView();
+    }
+
+    function toggleChecklistItem(id) {
+      checklistState[id] = !checklistState[id];
+      localStorage.setItem('shiori_checklist_v5', JSON.stringify(checklistState));
+      renderActiveView();
+    }
+
+    function resetAllChecklist() {
+      checklistState = {};
+      localStorage.removeItem('shiori_checklist_v5');
+      renderActiveView();
+    }
+
+    // ---------- 6. キーボード＆スワイプ操作 ----------
+    document.addEventListener('keydown', (e) => {
+      if (viewMode !== 'slide') return;
+      if (e.key === 'ArrowRight') nextPage();
+      if (e.key === 'ArrowLeft') prevPage();
+    });
+
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const stageEl = document.getElementById('slide-stage');
+    stageEl.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    }, { passive: true });
+    stageEl.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > 55) {
+        if (diff > 0) nextPage();
+        else prevPage();
+      }
+    }, { passive: true });
+
+    // ---------- 7. 初期化 ----------
+    window.addEventListener('DOMContentLoaded', () => {
+      renderActiveView();
+    });
+  </script>
+</body>
+</html>
